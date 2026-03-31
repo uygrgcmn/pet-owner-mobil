@@ -9,6 +9,7 @@ export function ConversationCard({ conversation }: { conversation: Conversation 
       <View style={styles.row}>
         <View style={styles.avatar}>
           <Text style={styles.avatarText}>{conversation.name.slice(0, 1)}</Text>
+          <View style={styles.onlineDot} />
         </View>
         <View style={styles.body}>
           <View style={styles.header}>
@@ -30,11 +31,19 @@ export function ConversationCard({ conversation }: { conversation: Conversation 
 const styles = StyleSheet.create({
   card: {
     padding: 16,
-    borderRadius: 20,
+    borderRadius: 24,
     backgroundColor: colors.surface,
     borderWidth: 1,
     borderColor: colors.border,
-    marginBottom: 12
+    marginBottom: 12,
+    shadowColor: "#000000",
+    shadowOpacity: 0.05,
+    shadowRadius: 14,
+    shadowOffset: {
+      width: 0,
+      height: 8
+    },
+    elevation: 4
   },
   row: {
     flexDirection: "row",
@@ -52,6 +61,17 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "800",
     color: colors.primary
+  },
+  onlineDot: {
+    position: "absolute",
+    right: 2,
+    bottom: 2,
+    width: 10,
+    height: 10,
+    borderRadius: 999,
+    backgroundColor: colors.success,
+    borderWidth: 2,
+    borderColor: colors.surface
   },
   body: {
     flex: 1,
@@ -73,6 +93,7 @@ const styles = StyleSheet.create({
   message: {
     marginTop: 6,
     fontSize: 13,
+    lineHeight: 18,
     color: colors.textMuted
   },
   unread: {
@@ -85,7 +106,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary
   },
   unreadText: {
-    color: "#FFFFFF",
+    color: colors.white,
     fontWeight: "800"
   }
 });

@@ -21,16 +21,17 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 12
+    marginBottom: 14
   },
   title: {
     fontSize: 18,
     fontWeight: "700",
+    letterSpacing: 0.2,
     color: colors.text
   },
   action: {
     fontSize: 13,
     fontWeight: "700",
-    color: colors.primary
+    color: colors.secondary
   }
 });

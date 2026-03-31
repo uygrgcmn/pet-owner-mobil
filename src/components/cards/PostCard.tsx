@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from "react-native";
 
-import { CommunityPost } from "../../types";
 import { colors } from "../../theme/colors";
+import { CommunityPost } from "../../types";
 
 export function PostCard({ post }: { post: CommunityPost }) {
   return (
@@ -14,7 +14,10 @@ export function PostCard({ post }: { post: CommunityPost }) {
       </View>
       <Text style={styles.title}>{post.title}</Text>
       <Text style={styles.description}>{post.description}</Text>
-      <Text style={styles.author}>Paylasan: {post.author}</Text>
+      <View style={styles.footer}>
+        <Text style={styles.author}>Paylasan: {post.author}</Text>
+        <Text style={styles.link}>Detayi gor</Text>
+      </View>
     </View>
   );
 }
@@ -22,11 +25,19 @@ export function PostCard({ post }: { post: CommunityPost }) {
 const styles = StyleSheet.create({
   card: {
     padding: 18,
-    borderRadius: 22,
+    borderRadius: 26,
     backgroundColor: colors.surface,
     borderWidth: 1,
     borderColor: colors.border,
-    marginBottom: 14
+    marginBottom: 14,
+    shadowColor: "#000000",
+    shadowOpacity: 0.05,
+    shadowRadius: 16,
+    shadowOffset: {
+      width: 0,
+      height: 10
+    },
+    elevation: 4
   },
   row: {
     flexDirection: "row",
@@ -62,10 +73,23 @@ const styles = StyleSheet.create({
     lineHeight: 21,
     color: colors.textMuted
   },
+  footer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginTop: 16,
+    paddingTop: 14,
+    borderTopWidth: 1,
+    borderTopColor: colors.border
+  },
   author: {
-    marginTop: 14,
     fontSize: 12,
     fontWeight: "700",
     color: colors.text
+  },
+  link: {
+    fontSize: 12,
+    fontWeight: "800",
+    color: colors.secondary
   }
 });
