@@ -1,26 +1,28 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 
+import { getSitterImage } from "../../data/mockImages";
 import { colors } from "../../theme/colors";
+import { headlineFont } from "../../theme/typography";
+import { radii, spacing } from "../../theme/tokens";
 import { PetSitter } from "../../types";
 
-export function SitterCard({ sitter }: { sitter: PetSitter }) {
-  const initials = sitter.name
-    .split(" ")
-    .map((part) => part[0])
-    .join("")
-    .slice(0, 2);
+type Props = {
+  sitter: PetSitter;
+  onOpen?: () => void;
+};
 
+export function SitterCard({ sitter, onOpen }: Props) {
   return (
     <View style={styles.card}>
-      <View style={styles.row}>
+      <View style={styles.header}>
         <View style={styles.identity}>
           <View style={styles.avatar}>
-            <Text style={styles.avatarText}>{initials}</Text>
+            <Image source={getSitterImage(sitter.id)} style={styles.avatarImage} />
           </View>
           <View style={styles.identityBody}>
             <Text style={styles.name}>{sitter.name}</Text>
             <Text style={styles.meta}>
-              {sitter.city} / {sitter.rating.toFixed(1)} puan
+              {sitter.city} / {sitter.rating.toFixed(1)} puan / Hizli yanit
             </Text>
           </View>
         </View>
@@ -38,10 +40,10 @@ export function SitterCard({ sitter }: { sitter: PetSitter }) {
       </View>
 
       <View style={styles.footer}>
-        <Text style={styles.footerText}>Hizli cevap veren profesyonel bakici</Text>
-        <View style={styles.cta}>
-          <Text style={styles.ctaText}>Profili incele</Text>
-        </View>
+        <Text style={styles.footerText}>Dogrulanmis profil, duzenli foto raporu ve hizli mesaj yaniti.</Text>
+        <Pressable accessibilityLabel={`${sitter.name} profilini gor`} accessibilityRole="button" onPress={onOpen} style={styles.cta}>
+          <Text style={styles.ctaText}>Profili gor</Text>
+        </Pressable>
       </View>
     </View>
   );
@@ -49,112 +51,105 @@ export function SitterCard({ sitter }: { sitter: PetSitter }) {
 
 const styles = StyleSheet.create({
   card: {
-    padding: 18,
-    borderRadius: 26,
-    backgroundColor: colors.surface,
+    padding: spacing.lg,
+    borderRadius: radii.lg,
+    backgroundColor: colors.white,
     borderWidth: 1,
     borderColor: colors.border,
-    marginBottom: 14,
-    shadowColor: "#000000",
-    shadowOpacity: 0.06,
-    shadowRadius: 18,
-    shadowOffset: {
-      width: 0,
-      height: 10
-    },
-    elevation: 4
+    marginBottom: spacing.md
   },
-  row: {
+  header: {
     flexDirection: "row",
     justifyContent: "space-between",
-    gap: 12
+    gap: spacing.sm
   },
   identity: {
     flexDirection: "row",
-    flex: 1,
-    alignItems: "center"
+    flex: 1
   },
   avatar: {
-    width: 52,
-    height: 52,
-    borderRadius: 26,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: colors.secondary
+    width: 58,
+    height: 58,
+    borderRadius: 18,
+    overflow: "hidden",
+    backgroundColor: colors.surfaceStrong
   },
-  avatarText: {
-    fontSize: 16,
-    fontWeight: "800",
-    color: colors.white
+  avatarImage: {
+    width: "100%",
+    height: "100%"
   },
   identityBody: {
     flex: 1,
-    marginLeft: 12
+    marginLeft: spacing.sm
   },
   name: {
-    fontSize: 17,
-    fontWeight: "800",
+    fontSize: 18,
+    fontWeight: "700",
+    fontFamily: headlineFont,
     color: colors.text
   },
   meta: {
-    marginTop: 6,
+    marginTop: spacing.xs,
     fontSize: 13,
+    lineHeight: 20,
     color: colors.textMuted
   },
   priceBadge: {
     alignSelf: "flex-start",
-    paddingHorizontal: 12,
+    paddingHorizontal: spacing.sm,
     paddingVertical: 10,
-    borderRadius: 16,
+    borderRadius: radii.pill,
     backgroundColor: colors.primarySoft
   },
   price: {
     fontSize: 12,
-    fontWeight: "800",
+    fontWeight: "700",
     color: colors.primary
   },
   tags: {
     flexDirection: "row",
     flexWrap: "wrap",
-    gap: 8,
-    marginTop: 16
+    gap: spacing.xs,
+    marginTop: spacing.md
   },
   tag: {
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    borderRadius: 999,
-    backgroundColor: "#EEF4EE"
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
+    borderRadius: radii.pill,
+    backgroundColor: colors.surfaceMuted,
+    borderWidth: 1,
+    borderColor: colors.border
   },
   tagText: {
     fontSize: 12,
     fontWeight: "700",
-    color: colors.accent
+    color: colors.text
   },
   footer: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginTop: 18,
-    paddingTop: 16,
+    marginTop: spacing.md,
+    paddingTop: spacing.md,
     borderTopWidth: 1,
     borderTopColor: colors.border
   },
   footerText: {
     flex: 1,
+    marginRight: spacing.sm,
     fontSize: 12,
-    lineHeight: 18,
+    lineHeight: 19,
     color: colors.textMuted
   },
   cta: {
-    marginLeft: 12,
-    paddingHorizontal: 14,
-    paddingVertical: 10,
-    borderRadius: 999,
+    paddingHorizontal: 16,
+    paddingVertical: 11,
+    borderRadius: radii.pill,
     backgroundColor: colors.secondary
   },
   ctaText: {
     fontSize: 12,
-    fontWeight: "800",
+    fontWeight: "700",
     color: colors.white
   }
 });

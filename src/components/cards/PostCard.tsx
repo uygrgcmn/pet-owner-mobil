@@ -1,22 +1,42 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 
+import { getPostImage } from "../../data/mockImages";
 import { colors } from "../../theme/colors";
+import { headlineFont } from "../../theme/typography";
+import { radii, spacing } from "../../theme/tokens";
 import { CommunityPost } from "../../types";
 
-export function PostCard({ post }: { post: CommunityPost }) {
+type Props = {
+  post: CommunityPost;
+  onOpen?: () => void;
+};
+
+export function PostCard({ post, onOpen }: Props) {
   return (
     <View style={styles.card}>
-      <View style={styles.row}>
-        <Text style={styles.category}>{post.category}</Text>
-        <View style={styles.badge}>
-          <Text style={styles.badgeText}>{post.badge}</Text>
+      <Image source={getPostImage(post.id)} style={styles.previewImage} />
+      <View style={styles.header}>
+        <View style={styles.categoryBadge}>
+          <Text style={styles.categoryText}>{post.category}</Text>
+        </View>
+        <View style={styles.statusBadge}>
+          <Text style={styles.statusText}>{post.badge}</Text>
         </View>
       </View>
+
       <Text style={styles.title}>{post.title}</Text>
       <Text style={styles.description}>{post.description}</Text>
+
       <View style={styles.footer}>
-        <Text style={styles.author}>Paylasan: {post.author}</Text>
-        <Text style={styles.link}>Detayi gor</Text>
+        <View>
+          <Text style={styles.authorLabel}>Paylasan</Text>
+          <Text style={styles.author}>{post.author}</Text>
+        </View>
+        {onOpen ? (
+          <Pressable accessibilityLabel={`${post.title} detayini ac`} accessibilityRole="button" onPress={onOpen} style={styles.cta}>
+            <Text style={styles.ctaText}>Detay</Text>
+          </Pressable>
+        ) : null}
       </View>
     </View>
   );
@@ -24,72 +44,91 @@ export function PostCard({ post }: { post: CommunityPost }) {
 
 const styles = StyleSheet.create({
   card: {
-    padding: 18,
-    borderRadius: 26,
-    backgroundColor: colors.surface,
+    padding: spacing.lg,
+    borderRadius: radii.lg,
+    backgroundColor: colors.white,
     borderWidth: 1,
     borderColor: colors.border,
-    marginBottom: 14,
-    shadowColor: "#000000",
-    shadowOpacity: 0.05,
-    shadowRadius: 16,
-    shadowOffset: {
-      width: 0,
-      height: 10
-    },
-    elevation: 4
+    marginBottom: spacing.md
   },
-  row: {
+  previewImage: {
+    width: "100%",
+    height: 236,
+    marginBottom: spacing.md,
+    borderRadius: radii.md
+  },
+  header: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center"
   },
-  category: {
-    fontSize: 12,
-    fontWeight: "800",
-    textTransform: "uppercase",
-    color: colors.secondary
-  },
-  badge: {
+  categoryBadge: {
     paddingHorizontal: 10,
-    paddingVertical: 6,
-    borderRadius: 999,
+    paddingVertical: 7,
+    borderRadius: radii.pill,
+    backgroundColor: colors.surfaceMuted,
+    borderWidth: 1,
+    borderColor: colors.border
+  },
+  categoryText: {
+    fontSize: 11,
+    fontWeight: "700",
+    color: colors.text
+  },
+  statusBadge: {
+    paddingHorizontal: 10,
+    paddingVertical: 7,
+    borderRadius: radii.pill,
     backgroundColor: colors.primarySoft
   },
-  badgeText: {
+  statusText: {
     fontSize: 11,
     fontWeight: "700",
     color: colors.primary
   },
   title: {
-    marginTop: 14,
-    fontSize: 18,
-    fontWeight: "800",
+    marginTop: spacing.sm,
+    fontSize: 22,
+    lineHeight: 28,
+    fontWeight: "700",
+    fontFamily: headlineFont,
     color: colors.text
   },
   description: {
-    marginTop: 10,
-    fontSize: 14,
-    lineHeight: 21,
+    marginTop: spacing.sm,
+    fontSize: 15,
+    lineHeight: 23,
     color: colors.textMuted
   },
   footer: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginTop: 16,
-    paddingTop: 14,
+    marginTop: spacing.md,
+    paddingTop: spacing.sm,
     borderTopWidth: 1,
     borderTopColor: colors.border
   },
+  authorLabel: {
+    fontSize: 11,
+    fontWeight: "600",
+    color: colors.textMuted
+  },
   author: {
-    fontSize: 12,
+    marginTop: 3,
+    fontSize: 14,
     fontWeight: "700",
     color: colors.text
   },
-  link: {
+  cta: {
+    paddingHorizontal: 16,
+    paddingVertical: 11,
+    borderRadius: radii.pill,
+    backgroundColor: colors.secondary
+  },
+  ctaText: {
     fontSize: 12,
-    fontWeight: "800",
-    color: colors.secondary
+    fontWeight: "700",
+    color: colors.white
   }
 });

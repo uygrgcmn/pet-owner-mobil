@@ -1,7 +1,13 @@
 import { Platform } from "react-native";
 
-export const displayFont = Platform.select({
-  ios: "Georgia",
-  android: "serif",
-  default: "serif"
+export const headlineFont = Platform.select({
+  ios: "AvenirNext-DemiBold",
+  android: "sans-serif-medium",
+  default: "sans-serif"
+});
+
+export const bodyFont = Platform.select({
+  ios: "AvenirNext-Regular",
+  android: "sans-serif",
+  default: "sans-serif"
 });

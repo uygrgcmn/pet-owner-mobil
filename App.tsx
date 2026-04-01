@@ -1,40 +1,49 @@
 import { StatusBar } from "expo-status-bar";
-import { SafeAreaView, StyleSheet, View } from "react-native";
+import { Platform, SafeAreaView, StyleSheet, View } from "react-native";
 
-import { AppHeader } from "./src/components/AppHeader";
 import { BottomTabBar } from "./src/components/BottomTabBar";
-import { CommunityScreen } from "./src/screens/CommunityScreen";
 import { CreateListingScreen } from "./src/screens/CreateListingScreen";
-import { HomeScreen } from "./src/screens/HomeScreen";
+import { ExploreScreen } from "./src/screens/HomeScreen";
 import { MessagesScreen } from "./src/screens/MessagesScreen";
 import { ProfileScreen } from "./src/screens/ProfileScreen";
-import { useAppTabs } from "./src/hooks/useAppTabs";
+import { StackScreens } from "./src/screens/StackScreens";
+import { useAppNavigation } from "./src/hooks/useAppNavigation";
+import { MockAppProvider } from "./src/store/mockAppStore";
 import { colors } from "./src/theme/colors";
 
 export default function App() {
-  const { activeTab, setActiveTab } = useAppTabs();
+  const { activeTab, currentRoute, goBack, navigate, switchTab } = useAppNavigation();
+  const showTabBar = !currentRoute;
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <StatusBar style="dark" />
-      <View style={styles.appShell}>
-        <View pointerEvents="none" style={styles.backdrop}>
-          <View style={styles.orbLarge} />
-          <View style={styles.orbSmall} />
-          <View style={styles.orbAccent} />
+    <MockAppProvider>
+      <SafeAreaView style={styles.safeArea}>
+        <StatusBar style="dark" />
+        <View style={styles.appShell}>
+          <View pointerEvents="none" style={styles.backdrop}>
+            <View style={styles.glowTop} />
+            <View style={styles.glowBottom} />
+          </View>
+          <View style={styles.content}>
+            {currentRoute ? (
+              <StackScreens route={currentRoute} actions={{ goBack, navigate, switchTab }} />
+            ) : (
+              <>
+                {activeTab === "explore" && <ExploreScreen navigate={navigate} switchTab={switchTab} />}
+                {activeTab === "create" && <CreateListingScreen navigate={navigate} switchTab={switchTab} />}
+                {activeTab === "messages" && <MessagesScreen navigate={navigate} switchTab={switchTab} />}
+                {activeTab === "profile" && <ProfileScreen navigate={navigate} switchTab={switchTab} />}
+              </>
+            )}
+          </View>
+          {showTabBar ? (
+            <View style={styles.tabBarHost}>
+              <BottomTabBar activeTab={activeTab} onChange={switchTab} />
+            </View>
+          ) : null}
         </View>
-
-        <AppHeader activeTab={activeTab} />
-        <View style={styles.content}>
-          {activeTab === "home" && <HomeScreen />}
-          {activeTab === "community" && <CommunityScreen />}
-          {activeTab === "create" && <CreateListingScreen />}
-          {activeTab === "messages" && <MessagesScreen />}
-          {activeTab === "profile" && <ProfileScreen />}
-        </View>
-        <BottomTabBar activeTab={activeTab} onChange={setActiveTab} />
-      </View>
-    </SafeAreaView>
+      </SafeAreaView>
+    </MockAppProvider>
   );
 }
 
@@ -50,36 +59,30 @@ const styles = StyleSheet.create({
   backdrop: {
     ...StyleSheet.absoluteFillObject
   },
-  orbLarge: {
+  glowTop: {
     position: "absolute",
-    top: -90,
-    right: -40,
-    width: 220,
-    height: 220,
-    borderRadius: 110,
-    backgroundColor: colors.primarySoft,
-    opacity: 0.55
+    top: -150,
+    right: -90,
+    width: 320,
+    height: 320,
+    borderRadius: 160,
+    backgroundColor: "#E6EEFF",
+    opacity: 0.9
   },
-  orbSmall: {
+  glowBottom: {
     position: "absolute",
-    top: 150,
-    left: -50,
-    width: 160,
-    height: 160,
-    borderRadius: 80,
-    backgroundColor: "#E6EEE9"
-  },
-  orbAccent: {
-    position: "absolute",
-    bottom: 120,
-    right: -40,
-    width: 120,
-    height: 120,
-    borderRadius: 60,
-    backgroundColor: "#F1E2BA",
-    opacity: 0.55
+    left: -70,
+    bottom: 180,
+    width: 240,
+    height: 240,
+    borderRadius: 120,
+    backgroundColor: "#FFE4D3"
   },
   content: {
     flex: 1
+  },
+  tabBarHost: {
+    backgroundColor: colors.nav,
+    paddingBottom: Platform.OS === "android" ? 8 : 0
   }
 });
